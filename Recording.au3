@@ -34,30 +34,23 @@ WEnd
 
 ; Click
 Func _SecondaryClick()
-    If $isCurveDragMode Then
         $avMousePos = MouseGetPos()
         ToolTip("x = " & $avMousePos[0] & "  y = " & $avMousePos[1])
-        $sFormattedLine= "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")"
-        FileWriteLine($hOP, $sFormattedLine)
-        ToolTip("")
-        $sFormattedLineSecondary= "MouseClick(" & '"' & "secondary" & '"'& ")"
-        FileWriteLine($hOP, $sFormattedLineSecondary)
+        FileWriteLine($hOP, "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")" & @CRLF)
+        FileWriteLine($hOP, "MouseClick(" & '"' & "secondary" & '"'& ")")
         FileWriteLine($hOP, "_TogglePause()")
         ToolTip("Registered RMB")
-    EndIf
 EndFunc
 
 ; Scrolls
 Func _MouseScrollDown()
-    $sFormattedLineWheelDown = "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF
-    FileWriteLine($hOP, $sFormattedLineWheelDown)
-    FileWriteLine($hOP, "Sleep(10))" & @CRLF
+    FileWriteLine($hOP, "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF)
+    FileWriteLine($hOP, "Sleep(10))" & @CRLF)
 EndFunc
 
 Func _MouseScrollUp()
-    $sFormattedLineWheelUp= "MouseWheel(" & '"' & "up" & '"' & "," & "1" & ")" & @CRLF
-    FileWriteLine($hOP, $sFormattedLineWheelUp)
-    FileWriteLine($hOP, "Sleep(10)" & @CRLF)    
+    FileWriteLine($hOP, "MouseWheel(" & '"' & "up" & '"' & "," & "1" & ")" & @CRLF)
+    FileWriteLine($hOP, "Sleep(10)" & @CRLF)
 EndFunc
 
 ; DragModes
@@ -70,6 +63,7 @@ Func _CurveDragMode()
         _MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "_SecondaryClick")
         _MouseSetOnEvent($MOUSE_WHEELSCROLLDOWN_EVENT, "_MouseScrollDown")
         _MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "_MouseScrollUp")
+		_MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "_SecondaryClick")
         ConsoleWrite("CurveDragMode is on" & @CRLF)
     Else
         $isCurveDragMode = False
@@ -77,6 +71,9 @@ Func _CurveDragMode()
         _MouseSetOnEvent($MOUSE_PRIMARYDOWN_EVENT, "")
         _MouseSetOnEvent($MOUSE_PRIMARYUP_EVENT, "")
         _MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "")
+        _MouseSetOnEvent($MOUSE_WHEELSCROLLDOWN_EVENT, "")
+        _MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "")
+		_MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "")
     EndIf
 EndFunc
 
@@ -93,28 +90,24 @@ EndFunc
 
 Func _CurveDragStart()
     $avMousePos = MouseGetPos()
-    $sFormattedLine= "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")"  & @CRLF
-    FileWriteLine($hOP, $sFormattedLine)
+    FileWriteLine($hOP, "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")"  & @CRLF)
     If $avMousePos[0] = $avPrevMousePos[0] And $avMousePos[1] = $avPrevMousePos[1] Then
         FileWrite($hOP, "Sleep(5)" & @CRLF)
     Else
         FileWrite($hOP, "Sleep(200)" & @CRLF)
     EndIf
-    $sFormattedMouseDown = "MouseDown(" & '"' & "primary" & '"' & ")"  & @CRLF
-    FileWrite($hOP, $sFormattedMouseDown)
+    FileWrite($hOP, "MouseDown(" & '"' & "primary" & '"' & ")"  & @CRLF)
 
     While $StartCurveFlag
         $aPos = MouseGetPos()
         If $aPos[0] <> $aPrevPos[0] Or $aPos[1] <> $aPrevPos[1] And $aPos[0] <> $avMousePos[0] Then
-            $sFormattedLineCurveDrag = "MouseMove(" & $aPos[0]& ", "  & $aPos[1] & "," & "0" & ")"  & @CRLF
-            FileWriteLine($hOP, $sFormattedLineCurveDrag)
+            FileWriteLine($hOP, "MouseMove(" & $aPos[0]& ", "  & $aPos[1] & "," & "0" & ")"  & @CRLF)
             FileWriteLine($hOP, "Sleep(10)" & @CRLF)
         EndIf
         $aPrevPos = $aPos
         Sleep(5)
     WEnd
-    $sFormattedMouseUp = "MouseUp(" & '"' & "primary" & '"' & ")" & @CRLF
-    FileWriteLine($hOP, $sFormattedMouseUp)
+    FileWriteLine($hOP, "MouseUp(" & '"' & "primary" & '"' & ")" & @CRLF)
     $StartCurveFlag = False
     $avPrevMousePos = $avMousePos
     FileWriteLine($hOP, "_TogglePause()" & @CRLF & @CRLF)
