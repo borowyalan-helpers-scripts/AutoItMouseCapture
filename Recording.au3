@@ -4,15 +4,15 @@
 #include <.\libs\MouseOnEvent.au3>
 
 HotKeySet("+1", "_Quit")
-HotKeySet("o", "_CurveDragMode")
+HotKeySet("o", "_StartRecordingMode")
 
 ; handles
 $dll = DllOpen("user32.dll")
 $hOP = FileOpen("Exec.au3", 1)
 
 ; CurveDrag Variables
-Global $isCurveDragMode = False
-Global $StartCurveFlag = False
+Global $isRecordingMode = False
+Global $isRecording = False
 Global $aPrevPos[2] = [0, 0]
 Global $avPrevMousePos[2] = [0,0]
 
@@ -27,26 +27,25 @@ EndIf
 ; Main Loop
 While 1
     Sleep(10)
-    If $isCurveDragMode And $StartCurveFlag Then
+    If $isRecordingMode And $isRecording Then
         _CurveDragStart()
     EndIf
 WEnd
 
 ; DragMode
-Func _CurveDragMode()
-    If Not $isCurveDragMode Then
-        $isCurveDragMode = True
-        ToolTip("Curve Drag mode on")
+Func _StartRecordingMode()
+    If Not $isRecordingMode Then
+        $isRecordingMode = True
+        ToolTip("Recording Mode on!")
         _MouseSetOnEvent($MOUSE_PRIMARYDOWN_EVENT, "_CurveDragHelper")
         _MouseSetOnEvent($MOUSE_PRIMARYUP_EVENT, "_CurveDragHelper")
         _MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "_SecondaryClick")
         _MouseSetOnEvent($MOUSE_WHEELSCROLLDOWN_EVENT, "_MouseScrollDown")
         _MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "_MouseScrollUp")
 		_MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "_SecondaryClick")
-        ConsoleWrite("CurveDragMode is on" & @CRLF)
     Else
-        $isCurveDragMode = False
-        ToolTip("Curve Drag mode off")
+        $isRecordingMode = False
+        ToolTip("Recording Mode off")
         _MouseSetOnEvent($MOUSE_PRIMARYDOWN_EVENT, "")
         _MouseSetOnEvent($MOUSE_PRIMARYUP_EVENT, "")
         _MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "")
@@ -79,11 +78,11 @@ EndFunc
 
 ; DragFunction
 Func _CurveDragHelper()
-    If $isCurveDragMode Then
-        If Not $StartCurveFlag Then
-            $StartCurveFlag = True
+    If $isRecordingMode Then
+        If Not $isRecording Then
+            $isRecording = True
         Else
-            $StartCurveFlag = False
+            $isRecording = False
         EndIf
     EndIf
 EndFunc
@@ -98,7 +97,7 @@ Func _CurveDragStart()
     EndIf
     FileWrite($hOP, "MouseDown(" & '"' & "primary" & '"' & ")"  & @CRLF)
 
-    While $StartCurveFlag
+    While $isRecording
         $aPos = MouseGetPos()
         If $aPos[0] <> $aPrevPos[0] Or $aPos[1] <> $aPrevPos[1] And $aPos[0] <> $avMousePos[0] Then
             FileWriteLine($hOP, "MouseMove(" & $aPos[0]& ", "  & $aPos[1] & "," & "0" & ")"  & @CRLF)
@@ -108,7 +107,7 @@ Func _CurveDragStart()
         Sleep(5)
     WEnd
     FileWriteLine($hOP, "MouseUp(" & '"' & "primary" & '"' & ")" & @CRLF)
-    $StartCurveFlag = False
+    $isRecording = False
     $avPrevMousePos = $avMousePos
     FileWriteLine($hOP, "_TogglePause()" & @CRLF & @CRLF)
     ToolTip("Registered")
