@@ -37,7 +37,7 @@ Func _SecondaryClick()
         $avMousePos = MouseGetPos()
         ToolTip("x = " & $avMousePos[0] & "  y = " & $avMousePos[1])
         FileWriteLine($hOP, "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")" & @CRLF)
-        FileWriteLine($hOP, "MouseClick(" & '"' & "secondary" & '"'& ")")
+        FileWriteLine($hOP, "MouseClick(" & '"' & "secondary" & '"'& ")" & CRLF)
         FileWriteLine($hOP, "_TogglePause()")
         ToolTip("Registered RMB")
 EndFunc
