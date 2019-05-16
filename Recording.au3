@@ -16,10 +16,6 @@ Global $StartCurveFlag = False
 Global $aPrevPos[2] = [0, 0]
 Global $avPrevMousePos[2] = [0,0]
 
-; MouseUDF Listeners
-_MouseSetOnEvent($MOUSE_WHEELSCROLLDOWN_EVENT, "_MouseScrollDown")
-_MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "_MouseScrollUp")
-
 ; Don't allow multiple instances
 If _Singleton("Start", 1) = 0 Then
     MsgBox($MB_SYSTEMMODAL, "Warning", "The script is already running")
@@ -53,19 +49,15 @@ EndFunc
 
 ; Scrolls
 Func _MouseScrollDown()
-    If $isCurveDragMode Then
-        $sFormattedLineWheelDown = "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF
-        FileWriteLine($hOP, $sFormattedLineWheelDown)
-        FileWriteLine($hOP, "Sleep(10))" & @CRLF
-    EndIf
+    $sFormattedLineWheelDown = "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF
+    FileWriteLine($hOP, $sFormattedLineWheelDown)
+    FileWriteLine($hOP, "Sleep(10))" & @CRLF
 EndFunc
 
 Func _MouseScrollUp()
-    If $isCurveDragMode Then
-        $sFormattedLineWheelUp= "MouseWheel(" & '"' & "up" & '"' & "," & "1" & ")" & @CRLF
-        FileWriteLine($hOP, $sFormattedLineWheelUp)
-        FileWriteLine($hOP, "Sleep(10)" & @CRLF)    
-    EndIf
+    $sFormattedLineWheelUp= "MouseWheel(" & '"' & "up" & '"' & "," & "1" & ")" & @CRLF
+    FileWriteLine($hOP, $sFormattedLineWheelUp)
+    FileWriteLine($hOP, "Sleep(10)" & @CRLF)    
 EndFunc
 
 ; DragModes
@@ -76,6 +68,8 @@ Func _CurveDragMode()
         _MouseSetOnEvent($MOUSE_PRIMARYDOWN_EVENT, "_CurveDragHelper")
         _MouseSetOnEvent($MOUSE_PRIMARYUP_EVENT, "_CurveDragHelper")
         _MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "_SecondaryClick")
+        _MouseSetOnEvent($MOUSE_WHEELSCROLLDOWN_EVENT, "_MouseScrollDown")
+        _MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "_MouseScrollUp")
         ConsoleWrite("CurveDragMode is on" & @CRLF)
     Else
         $isCurveDragMode = False
