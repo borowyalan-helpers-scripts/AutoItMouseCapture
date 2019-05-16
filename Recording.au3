@@ -5,23 +5,11 @@
 #include <.\libs\MouseOnEvent.au3>
 
 HotKeySet("+1", "_Quit")
-;HotKeySet("+2", "_ClearCord")
 HotKeySet("p", "_DragMode")
 HotKeySet("o", "_CurveDragMode")
 
 $dll = DllOpen("user32.dll")
 $hOP = FileOpen("Exec.au3", 1)
-$Paused = True
-
-Global $secondsElapsed = 0
-Global $sAnswer = 0
-
-; LinearDrag Variables
-Global $isDragMode = False
-$dragStartX = 0
-$dragStartY = 0
-$dragEndX = 0
-$dragEndY = 0
 
 ; CurveDrag Variables
 Global $isCurveDragMode = False
@@ -98,10 +86,6 @@ Func _MouseScrollUp()
 EndFunc
 
 ; DragModes
- Func _DragMode()
-    $isDragMode = True
-    ToolTip("Drag mode on")
-EndFunc
 
 Func _CurveDragMode()
     If Not $isCurveDragMode Then
@@ -121,32 +105,6 @@ Func _CurveDragMode()
 EndFunc
 
 ; DragFunctions
-
-Func _RecordDrag()
-    If $isDragMode Then
-        If $dragStartX = 0 Or $dragStartY = 0 Then
-            $DSMousePos = MouseGetPos()
-            $dragStartX = $DSMousePos[0]
-            $dragStartY = $DSMousePos[1]
-            $isRecordingDrag = True
-        EndIf
-    EndIf
-EndFunc
-
-Func _RecordDragEnd()
-    $DEMousePos = MouseGetPos()
-    $dragEndX = $DEMousePos[0]
-    $dragEndY = $DEMousePos[1]
-
-    If $isDragMode And $isRecordingDrag Then
-        $sFormattedLineDrag= "MouseClickDrag(" & '"' & "primary" & '"'& "," & $dragStartX & "," & $dragStartY & "," & $dragEndX & "," & $dragEndY & "," & "20" & ")"
-        FileWriteLine($hOP, $sFormattedLineDrag)
-        $isDragMode = False
-        $isRecordingDrag = False
-        $dragStartX = 0
-        $dragStartY = 0
-    EndIf
-EndFunc
 
 Func _CurveDragHelper()
     ; Set the flag within the OnEvent function
@@ -209,13 +167,6 @@ If _Singleton("Start", 1) = 0 Then
     MsgBox($MB_SYSTEMMODAL, "Warning", "The script is already running")
     Exit
 EndIf
-
-Func _ClearCord()
-    FileWrite(".\Exec.au3", ";helper" & @CRLF)
-    FileWriteToLine(".\Exec.au3", 1, "#include <.\libs\_Quit.au3>")
-    MsgBox($MB_SYSTEMMODAL, "Warning", "Cords reset done")
-    ; FileWriteLine($hOP, "")
-EndFunc
 
 Func _Quit()
     DllClose($dll)
