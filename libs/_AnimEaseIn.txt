@@ -1,0 +1,33 @@
+###User Defined Function###
+_AnimEaseIn
+
+###Description###
+Perform the ease in equation, used on animations that starts smoothly.
+
+###Syntax###
+#include <AnimationEasing.au3>
+_AnimEaseIn ($nPosition[, $nSmoothness])
+
+###Parameters###
+@@ParamTable@@
+$nPosition
+	Position of the animation. It is a number between 0 and 1.
+$nSmoothness
+	Smoothness of the animation. It is a number that is not less than 1.
+	1 = Linear animation.
+	2 = Quite smooth. [Default]
+@@End@@
+
+###ReturnValue###
+Computed position. It is a number between 0 and 1.
+
+
+###Remarks###
+None.
+
+
+###Related###
+
+
+###Example###
+@@IncludeExample@@

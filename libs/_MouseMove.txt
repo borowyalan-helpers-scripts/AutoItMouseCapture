@@ -1,0 +1,31 @@
+###User Defined Function###
+_MouseMove
+
+###Description###
+Moves the mouse smoothly, with some random movements.
+
+###Syntax###
+#include <SmootherMouseMove.au3>
+_MouseMove ($iX, $iY)
+
+###Parameters###
+@@ParamTable@@
+$iX
+	Position to move to in X offset.
+$iY
+	Position to move to in Y offset.
+@@End@@
+
+###ReturnValue###
+None.
+
+
+###Remarks###
+None.
+
+
+###Related###
+
+
+###Example###
+@@IncludeExample@@
