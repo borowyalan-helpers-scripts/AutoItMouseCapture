@@ -32,7 +32,7 @@ While 1
     EndIf
 WEnd
 
-; DragMode
+; Get ready for recording & set MouseEvent handlers
 Func _StartRecordingMode()
     If Not $isRecordingMode Then
         $isRecordingMode = True
@@ -55,7 +55,7 @@ Func _StartRecordingMode()
     EndIf
 EndFunc
 
-; Click
+; Handle RMB Click
 Func _SecondaryClick()
         $avMousePos = MouseGetPos()
         ToolTip("x = " & $avMousePos[0] & "  y = " & $avMousePos[1])
@@ -65,7 +65,7 @@ Func _SecondaryClick()
         ToolTip("Registered RMB")
 EndFunc
 
-; Scrolls
+; Handle Scrolls
 Func _MouseScrollDown()
     FileWriteLine($hOP, "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF)
     FileWriteLine($hOP, "Sleep(10))" & @CRLF)
@@ -76,7 +76,7 @@ Func _MouseScrollUp()
     FileWriteLine($hOP, "Sleep(10)" & @CRLF)
 EndFunc
 
-; DragFunction
+; Handle LMB & LMB drag
 Func _CurveDragHelper()
     If $isRecordingMode Then
         If Not $isRecording Then
