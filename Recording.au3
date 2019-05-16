@@ -28,6 +28,11 @@ _Mouse_RegisterEvent($EVENT_PRIMARY_DBLCLICK, "_DoubleClick")
 _MouseSetOnEvent($MOUSE_WHEELSCROLLDOWN_EVENT, "_MouseScrollDown")
 _MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "_MouseScrollUp")
 
+If _Singleton("Start", 1) = 0 Then
+    MsgBox($MB_SYSTEMMODAL, "Warning", "The script is already running")
+    Exit
+EndIf
+
 ; -------------------------------------------------------------------------------------------------------------------------------
 
 ; Main Loop
@@ -163,10 +168,7 @@ EndFunc
 
 ; Script Utilities
 
-If _Singleton("Start", 1) = 0 Then
-    MsgBox($MB_SYSTEMMODAL, "Warning", "The script is already running")
-    Exit
-EndIf
+
 
 Func _Quit()
     DllClose($dll)
