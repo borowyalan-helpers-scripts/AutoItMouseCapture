@@ -1,7 +1,7 @@
 #include <Misc.au3>
 #include <MsgBoxConstants.au3>
 #include <File.au3>
-#include <.\libs\_Mouse_UDF.au3>
+#include <.\libs\MouseOnEvent.au3>
 
 HotKeySet("+1", "_Quit")
 HotKeySet("o", "_CurveDragMode")
@@ -53,11 +53,11 @@ EndFunc
 
 ; Scrolls
 Func _MouseScrollDown()
-If $isCurveDragMode Then
-    $sFormattedLineWheelDown = "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF
-    FileWriteLine($hOP, $sFormattedLineWheelDown)
-    FileWriteLine($hOP, "Sleep(10))" & @CRLF
-EndIf
+    If $isCurveDragMode Then
+        $sFormattedLineWheelDown = "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF
+        FileWriteLine($hOP, $sFormattedLineWheelDown)
+        FileWriteLine($hOP, "Sleep(10))" & @CRLF
+    EndIf
 EndFunc
 
 Func _MouseScrollUp()
