@@ -3,8 +3,8 @@
 #include <File.au3>
 #include <.\libs\MouseOnEvent.au3>
 
-HotKeySet("+1", "_Quit")
-HotKeySet("o", "_StartRecordingMode")
+HotKeySet("q", "_Quit")
+HotKeySet("r", "_StartRecordingMode")
 
 ; handles
 $dll = DllOpen("user32.dll")
@@ -28,7 +28,7 @@ EndIf
 While 1
     Sleep(10)
     If $isRecordingMode And $isRecording Then
-        _CurveDragStart()
+        _PrimaryClick()
     EndIf
 WEnd
 
@@ -37,8 +37,8 @@ Func _StartRecordingMode()
     If Not $isRecordingMode Then
         $isRecordingMode = True
         ToolTip("Recording Mode on!")
-        _MouseSetOnEvent($MOUSE_PRIMARYDOWN_EVENT, "_CurveDragHelper")
-        _MouseSetOnEvent($MOUSE_PRIMARYUP_EVENT, "_CurveDragHelper")
+        _MouseSetOnEvent($MOUSE_PRIMARYDOWN_EVENT, "_PrimaryClickHelper")
+        _MouseSetOnEvent($MOUSE_PRIMARYUP_EVENT, "_PrimaryClickHelper")
         _MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "_SecondaryClick")
         _MouseSetOnEvent($MOUSE_WHEELSCROLLDOWN_EVENT, "_MouseScrollDown")
         _MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "_MouseScrollUp")
@@ -77,17 +77,11 @@ Func _MouseScrollUp()
 EndFunc
 
 ; Handle LMB & LMB drag
-Func _CurveDragHelper()
-    If $isRecordingMode Then
-        If Not $isRecording Then
-            $isRecording = True
-        Else
-            $isRecording = False
-        EndIf
-    EndIf
+Func _PrimaryClickHelper()
+    $isRecording = Not $isRecording
 EndFunc
 
-Func _CurveDragStart()
+Func _PrimaryClick()
     $avMousePos = MouseGetPos()
     FileWriteLine($hOP, "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")"  & @CRLF)
     If $avMousePos[0] = $avPrevMousePos[0] And $avMousePos[1] = $avPrevMousePos[1] Then
@@ -107,7 +101,6 @@ Func _CurveDragStart()
         Sleep(5)
     WEnd
     FileWriteLine($hOP, "MouseUp(" & '"' & "primary" & '"' & ")" & @CRLF)
-    $isRecording = False
     $avPrevMousePos = $avMousePos
     FileWriteLine($hOP, "_TogglePause()" & @CRLF & @CRLF)
     ToolTip("Registered")
