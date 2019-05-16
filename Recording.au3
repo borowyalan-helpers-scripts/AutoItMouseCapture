@@ -32,28 +32,7 @@ While 1
     EndIf
 WEnd
 
-; Click
-Func _SecondaryClick()
-        $avMousePos = MouseGetPos()
-        ToolTip("x = " & $avMousePos[0] & "  y = " & $avMousePos[1])
-        FileWriteLine($hOP, "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")" & @CRLF)
-        FileWriteLine($hOP, "MouseClick(" & '"' & "secondary" & '"'& ")" & CRLF)
-        FileWriteLine($hOP, "_TogglePause()")
-        ToolTip("Registered RMB")
-EndFunc
-
-; Scrolls
-Func _MouseScrollDown()
-    FileWriteLine($hOP, "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF)
-    FileWriteLine($hOP, "Sleep(10))" & @CRLF)
-EndFunc
-
-Func _MouseScrollUp()
-    FileWriteLine($hOP, "MouseWheel(" & '"' & "up" & '"' & "," & "1" & ")" & @CRLF)
-    FileWriteLine($hOP, "Sleep(10)" & @CRLF)
-EndFunc
-
-; DragModes
+; DragMode
 Func _CurveDragMode()
     If Not $isCurveDragMode Then
         $isCurveDragMode = True
@@ -75,6 +54,27 @@ Func _CurveDragMode()
         _MouseSetOnEvent($MOUSE_WHEELSCROLLUP_EVENT, "")
 		_MouseSetOnEvent($MOUSE_SECONDARYDOWN_EVENT, "")
     EndIf
+EndFunc
+
+; Click
+Func _SecondaryClick()
+        $avMousePos = MouseGetPos()
+        ToolTip("x = " & $avMousePos[0] & "  y = " & $avMousePos[1])
+        FileWriteLine($hOP, "MouseMove(" & $avMousePos[0]& ", "  & $avMousePos[1] & ")" & @CRLF)
+        FileWriteLine($hOP, "MouseClick(" & '"' & "secondary" & '"'& ")" & CRLF)
+        FileWriteLine($hOP, "_TogglePause()")
+        ToolTip("Registered RMB")
+EndFunc
+
+; Scrolls
+Func _MouseScrollDown()
+    FileWriteLine($hOP, "MouseWheel(" & '"' & "down" & '"' & "," & "1" & ")" & @CRLF)
+    FileWriteLine($hOP, "Sleep(10))" & @CRLF)
+EndFunc
+
+Func _MouseScrollUp()
+    FileWriteLine($hOP, "MouseWheel(" & '"' & "up" & '"' & "," & "1" & ")" & @CRLF)
+    FileWriteLine($hOP, "Sleep(10)" & @CRLF)
 EndFunc
 
 ; DragFunction
@@ -114,12 +114,9 @@ Func _CurveDragStart()
     ToolTip("Registered")
 EndFunc
 
-
 ; Script Utilities
 Func _Quit()
     DllClose($dll)
     FileClose($hOP)
     Exit
 EndFunc
-
-
