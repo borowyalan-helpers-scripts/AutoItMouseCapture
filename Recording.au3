@@ -115,7 +115,7 @@ Func _PrimaryClick()
 
     ; click in the exact same place
     If $avMousePos[0] = $avPrevMousePos[0] And $avMousePos[1] = $avPrevMousePos[1] Then
-        _DoubleClick($avMousePos)
+        _DoubleClick()
         Return True
     EndIf
 
