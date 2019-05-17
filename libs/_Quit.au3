@@ -1,5 +1,5 @@
 #include <SmootherMouseMove.au3>
-HotKeySet("+2", "_Quit")
+HotKeySet("+e", "_Quit")
 Func _Quit()
    Exit
 EndFunc
